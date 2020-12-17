@@ -12,7 +12,7 @@ $media-sm: 576px;
 $media-md: 768px;
 $media-lg: 992px;
 
-@import "~bootstrap/scss/bootstrap";
+@import "./node_modules/bootstrap/scss/bootstrap";
 
 body {
     font-family: $body;
