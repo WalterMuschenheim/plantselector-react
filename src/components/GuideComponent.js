@@ -8,7 +8,7 @@ import { Collapse } from 'reactstrap';
 
 
 function Guide(props) {
-    function ControlledCarousel() {
+    /*function ControlledCarousel() {
         const [index, setIndex] = useState(0);
       
         const handleSelect = (selectedIndex, e) => {
@@ -52,7 +52,8 @@ function Guide(props) {
             </div>
         )
     }
-    return(<ControlledCarousel />);
+    return(<ControlledCarousel />);*/
+    return(<div>empty</div>)
 }
 
 export default Guide;

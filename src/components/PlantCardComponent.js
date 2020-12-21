@@ -3,14 +3,15 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 
 function PlantCard(props) {
-    if(props.plantfilter(props.criteria, props.plant)) {
+
+    if(props.plantFilter(props.criteria, props.plant)) {
         return(
             <Link to={`/${props.plant.name}`}>
                 <Card>
                     {
-                        function() {if(props.plant.imageURL) {return(
-                            <CardImg src={props.plant.imageURL}/>
-                        )}}
+                        //function() {if(props.plant.imageURL != "undefined") {return(
+                    }<CardImg src={props.plant.imageURL}/>{
+                        //)}}
                     }
                     <CardBody>
                         <CardTitle>
@@ -18,11 +19,17 @@ function PlantCard(props) {
                         </CardTitle>
                         <CardText>
                             {props.plant.description}
+                            {props.plant.height}
+                            {props.plant.light}
+                            {props.plant.care}
+                            {props.criteria.toString()}
                         </CardText>
                     </CardBody>
                 </Card>
             </Link>
             );
+        } else {
+            return null;
         }
 }
 

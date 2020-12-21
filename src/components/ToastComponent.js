@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-function FilterToast(props) {
+/*function FilterToast(props) {
     const ToastItems = props.criteria.map((criterium) =>  {
         return(
             <p className="toast-p" id={test} data-critval={test}><a className="text-decoration-none">{test}</a></p>
@@ -23,10 +23,10 @@ function FilterToast(props) {
             </div>
         </div>
     )
-}
+}*/
 
 function Toasts(props) {
-    return(
+    /*return(
                 <div className="d-none d-lg-flex" style="max-width: 200px;">
                     <div id="toastcontainer">
                         
@@ -41,7 +41,8 @@ function Toasts(props) {
                        }
                     </div>
                 </div>
-    )
+    )*/
+    return(<div>empty</div>)
 }
 
 export default Toasts;
