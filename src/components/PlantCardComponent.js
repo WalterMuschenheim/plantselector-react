@@ -4,7 +4,7 @@ import React from 'react';
 
 function PlantCard(props) {
 
-    if(props.plantFilter(props.criteria, props.plant)) {
+    if(props.plantFilter(props.plant)) {
         return(
             <Link to={`/${props.plant.name}`}>
                 <Card>
@@ -22,7 +22,6 @@ function PlantCard(props) {
                             {props.plant.height}
                             {props.plant.light}
                             {props.plant.care}
-                            {props.criteria.toString()}
                         </CardText>
                     </CardBody>
                 </Card>

@@ -1,66 +1,71 @@
 import { Component } from 'react';
 import PlantList from './PlantListComponent';
-/*import FilterNav from './FilterNavComponent';*/
+import FilterNav from './FilterNavComponent';
 /*import Guide from './GuideComponent';*/
 import PlantSingle from './PlantSingleComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { PLANTS } from '../shared/plants';
 import { EXPLAINERS } from '../shared/explainers';
-import FilterNav from './FilterNavComponent';
 
+EXPLAINERS.forEach(function(explainer, index){
+  console.log(explainer);
+  PLANTS.splice((Math.floor((Math.random() * PLANTS.length)) + index*3), 0, explainer)
+});
 
 class Main extends Component {
   constructor(props) {
     super(props);
         
-        EXPLAINERS.forEach(function(explainer, index){
-          console.log(explainer);
-          PLANTS.splice((Math.floor((Math.random() * PLANTS.length)) + index*3), 0, explainer)
-        });
+    
     this.state = {
         plants: PLANTS,
         criteria: [],
+        searchValue: "",
     };
     this.plantFilter = this.plantFilter.bind(this);
     this.updateCriteria = this.updateCriteria.bind(this);
+    this.clearCriteria = this.clearCriteria.bind(this);
+    this.valCheck = this.valCheck.bind(this);
+    this.formControll = this.formControll.bind(this);
   }
 
-  plantFilter(criteria, plant) {
-    /*var searchvalue = document.getElementById("plantsearch").val().toLowerCase();*/
+  plantFilter(plant) {
+    var searchValue = this.state.searchValue;
     var cardheight = true;
     var cardlight = true;
     var cardcare = true;
     
   
-    for (let i = 0; i < criteria.length; i++) {
-        if (criteria[i][0] == "height" && plant.height.indexOf(criteria[i][1]) > -1) {
+    for (let i = 0; i < this.state.criteria.length; i++) {
+        if (this.state.criteria[i][0] == "height" && plant.height && plant.height.indexOf(this.state.criteria[i][1]) > -1) {
             cardheight = true;
             break
-        } else if (criteria[i][0] == "height" && plant.height.indexOf(criteria[i][1]) == -1) {
+        } else if (this.state.criteria[i][0] == "height" && plant.height && plant.height.indexOf(this.state.criteria[i][1]) == -1) {
             cardheight = false;
         };
     }
 
-    for (let i = 0; i < criteria.length; i++) {
-        if (criteria[i][0] == "light" && plant.light.text().toLowerCase().indexOf(criteria[i][1]) > -1) {
+    for (let i = 0; i < this.state.criteria.length; i++) {
+        if (this.state.criteria[i][0] == "light" && plant.light && plant.light.indexOf(this.state.criteria[i][1]) > -1) {
             cardlight = true;
             break
-        } else if (criteria[i][0] == "light" && plant.light.text().toLowerCase().indexOf(criteria[i][1]) == -1) {
+        } else if (this.state.criteria[i][0] == "light" && plant.light && plant.light.indexOf(this.state.criteria[i][1]) == -1) {
             cardlight = false;
         };
     }
 
-    for (let i = 0; i < criteria.length; i++) {
-        if (criteria[i][0] == "care" && plant.care.text().toLowerCase().indexOf(criteria[i][1]) > -1) {
+    for (let i = 0; i < this.state.criteria.length; i++) {
+        if (this.state.criteria[i][0] == "care" && plant.care && plant.care.indexOf(this.state.criteria[i][1]) > -1) {
             cardcare = true;
             break
-        } else if (criteria[i][0] == "care" && plant.care.text().toLowerCase().indexOf(criteria[i][1]) == -1) {
+        } else if (this.state.criteria[i][0] == "care" && plant.care && plant.care.indexOf(this.state.criteria[i][1]) == -1) {
             cardcare = false;
         };
     }
-    //var cardValue = plant.keywords.text().toLowerCase();
-    //cardValue += plant.keywords.text().toLowerCase();
-    return(cardheight && cardlight && cardcare /*&& cardValue.indexOf(searchvalue) > -1*/);
+    var cardValue
+    if(plant.keywords) {cardValue = plant.keywords.toLowerCase()};
+    cardValue += plant.name.toLowerCase();
+    return(cardheight && cardlight && cardcare && cardValue.indexOf(searchValue) > -1);
   };
 
   /* functions to edit criteria list and to update toasts and navbar links according to that list */
@@ -83,17 +88,33 @@ class Main extends Component {
         }) != undefined) {
           let criteria = this.state.criteria;
           criteria.splice(i, 1);
-          this.setState({criteria : criteria});
+          this.setState({criteria: criteria});
         }
       }
   };
+
+  formControll(ev) {
+    this.setState({searchValue: ev.target.value});
+  }
+
+  clearCriteria(ev) {
+    var clear = ev.target.dataset.critclear;
+    var i = "";
+    while (this.state.criteria.find(function(currentVal, index) {
+        i = index;
+        return currentVal[0] == clear;
+    }) != undefined) {
+        let criteria = this.state.criteria
+        criteria.splice(i, 1);
+        this.setState({criteria: criteria})
+    }
+  }
   
-  /*valCheck() {
-    thisVal = this.val('critval');
-    return (
-      criteria.find(function(value) {value == this}, thisVal) > 0
-      )
-    };*/
+  valCheck(item) {
+    var check = item.dataset.critval;
+    console.log("valCheck value is " + check + " result is " + (this.state.criteria.find(function(value) {return value[1] == check;}) !== undefined))
+    return this.state.criteria.find(function(value) {return value[1] == check;}) !== undefined
+    };
 
   /* this one needs to be applied to the nav lis every time the view is rerendered; somehting like < active={valCheck()} */
   /* not sure about 'this' tho */
@@ -121,8 +142,8 @@ class Main extends Component {
     const HomePage =() => {
       return(
         <div>
-          <FilterNav criteria={this.state.criteria} clickFunction={this.updateCriteria}/>
-          <PlantList criteria={this.state.criteria} plants={this.state.plants} plantFilter={this.plantFilter}/>
+          <FilterNav updateCriteria={this.updateCriteria} clearCriteria={this.clearCriteria} valCheck={this.valCheck} formControll={this.formControll} formValue={this.state.searchValue}/>
+          <PlantList plants={this.state.plants} plantFilter={this.plantFilter}/>
         </div>
       )
     }
