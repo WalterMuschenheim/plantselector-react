@@ -19,12 +19,12 @@ function FilterNav(props) {
     React.useEffect(() => {
         var filterItems = document.querySelectorAll('.filter-item');
         for (let i = 0; i < filterItems.length; i++) {
-            filterItems[i].addEventListener("click", function(event) {props.updateCriteria(event)})
+            filterItems[i].addEventListener("click", props.updateCriteria);
             if (props.valCheck(filterItems[i])) {filterItems[i].classList.add("active")}
         }
         var clearItems = document.querySelectorAll('.clear-item');
         for (let i = 0; i < clearItems.length; i++) {
-            clearItems[i].addEventListener("click", function (event) {props.clearCriteria(event)})
+            clearItems[i].addEventListener("click", props.clearCriteria)
         }
     }, []);
 
