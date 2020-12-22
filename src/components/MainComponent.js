@@ -6,6 +6,7 @@ import PlantSingle from './PlantSingleComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { PLANTS } from '../shared/plants';
 import { EXPLAINERS } from '../shared/explainers';
+import FilterNavClass from './FilterNavClassComponent';
 
 EXPLAINERS.forEach(function(explainer, index){
   console.log(explainer);
@@ -160,7 +161,8 @@ class Main extends Component {
 
     return (
       <div className="App">
-        <HomePage/>
+        <FilterNav updateCriteria={this.updateCriteria} clearCriteria={this.clearCriteria} valCheck={this.valCheck} formControll={this.formControll} formValue={this.state.searchValue}/>
+        <PlantList plants={this.state.plants} plantFilter={this.plantFilter}/>
       </div>
     );
   }
