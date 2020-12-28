@@ -9,7 +9,6 @@ import { EXPLAINERS } from '../shared/explainers';
 import FilterNavClass from './FilterNavClassComponent';
 
 EXPLAINERS.forEach(function(explainer, index){
-  console.log(explainer);
   PLANTS.splice((Math.floor((Math.random() * PLANTS.length)) + index*3), 0, explainer)
 });
 
@@ -26,6 +25,7 @@ class Main extends Component {
     this.plantFilter = this.plantFilter.bind(this);
     this.updateCriteria = this.updateCriteria.bind(this);
     this.clearCriteria = this.clearCriteria.bind(this);
+    this.clearCriteriaToast = this.clearCriteriaToast.bind(this);
     this.valCheck = this.valCheck.bind(this);
     this.formControll = this.formControll.bind(this);
   }
@@ -36,7 +36,6 @@ class Main extends Component {
     var cardlight = true;
     var cardcare = true;
     
-  
     for (let i = 0; i < this.state.criteria.length; i++) {
         if (this.state.criteria[i][0] == "height" && plant.height && plant.height.indexOf(this.state.criteria[i][1]) > -1) {
             cardheight = true;
@@ -45,7 +44,6 @@ class Main extends Component {
             cardheight = false;
         };
     }
-
     for (let i = 0; i < this.state.criteria.length; i++) {
         if (this.state.criteria[i][0] == "light" && plant.light && plant.light.indexOf(this.state.criteria[i][1]) > -1) {
             cardlight = true;
@@ -54,7 +52,6 @@ class Main extends Component {
             cardlight = false;
         };
     }
-
     for (let i = 0; i < this.state.criteria.length; i++) {
         if (this.state.criteria[i][0] == "care" && plant.care && plant.care.indexOf(this.state.criteria[i][1]) > -1) {
             cardcare = true;
@@ -63,6 +60,7 @@ class Main extends Component {
             cardcare = false;
         };
     }
+
     var cardValue
     if(plant.keywords) {cardValue = plant.keywords.toLowerCase()};
     cardValue += plant.name.toLowerCase();
@@ -103,7 +101,19 @@ class Main extends Component {
     var i = "";
     while (this.state.criteria.find(function(currentVal, index) {
         i = index;
-        return currentVal[0] == clear;
+          return currentVal[0] == clear;
+    }) != undefined) {
+        let criteria = this.state.criteria
+        criteria.splice(i, 1);
+        this.setState({criteria: criteria})
+    }
+  }
+
+  clearCriteriaToast(clear) {
+    var i = "";
+    while (this.state.criteria.find(function(currentVal, index) {
+        i = index;
+          return currentVal[0] == clear;
     }) != undefined) {
         let criteria = this.state.criteria
         criteria.splice(i, 1);
@@ -113,22 +123,8 @@ class Main extends Component {
   
   valCheck(item) {
     var check = item.dataset.critval;
-    console.log("valCheck value is " + check + " result is " + (this.state.criteria.find(function(value) {return value[1] == check;}) !== undefined))
     return this.state.criteria.find(function(value) {return value[1] == check;}) !== undefined
     };
-
-  /* this one needs to be applied to the nav lis every time the view is rerendered; somehting like < active={valCheck()} */
-  /* not sure about 'this' tho */
-
-  /*editCriteria() {
-    this.on(click, function() {
-      if (valCheck()) {
-
-      }
-    });
-  }*/
-  
-  
   
   
   render() {
@@ -140,14 +136,14 @@ class Main extends Component {
       )
     }
 
-    const HomePage =() => {
+    /*const HomePage =() => {
       return(
         <div>
           <FilterNav updateCriteria={this.updateCriteria} clearCriteria={this.clearCriteria} valCheck={this.valCheck} formControll={this.formControll} formValue={this.state.searchValue}/>
           <PlantList plants={this.state.plants} plantFilter={this.plantFilter}/>
         </div>
       )
-    }
+    }*/
   
     /*return (
       <div className="App">
@@ -161,7 +157,7 @@ class Main extends Component {
 
     return (
       <div className="App">
-        <FilterNav updateCriteria={this.updateCriteria} clearCriteria={this.clearCriteria} valCheck={this.valCheck} formControll={this.formControll} formValue={this.state.searchValue}/>
+        <FilterNav updateCriteria={this.updateCriteria} clearCriteria={this.clearCriteria} clearCriteriaToast={this.clearCriteriaToast} valCheck={this.valCheck} formControll={this.formControll} criteria={this.state.criteria} formValue={this.state.searchValue}  test={this.state.test}/>
         <PlantList plants={this.state.plants} plantFilter={this.plantFilter}/>
       </div>
     );
