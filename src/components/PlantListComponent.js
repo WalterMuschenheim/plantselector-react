@@ -3,9 +3,7 @@ import PlantCard from './PlantCardComponent';
 
 function PlantList(props) {
     return(
-        <div className="container">
-
-            {/* plant cards */}
+        <div className="container" style={{ marginTop: props.navHeight }}>
             <div className="container" id="plantlist">
                 <div className="row row-content">
                     <div className="" id="plantlist-inner">
@@ -15,8 +13,6 @@ function PlantList(props) {
                     </div>
                 </div>
             </div>
-            {/* end of plant cards */}
-
         </div>
     )
 }

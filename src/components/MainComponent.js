@@ -1,12 +1,11 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PlantList from './PlantListComponent';
 import FilterNav from './FilterNavComponent';
-/*import Guide from './GuideComponent';*/
-import PlantSingle from './PlantSingleComponent';
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import Guide from './GuideComponent';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { PLANTS } from '../shared/plants';
 import { EXPLAINERS } from '../shared/explainers';
-import FilterNavClass from './FilterNavClassComponent';
+import ReactDOM from 'react-dom'
 
 EXPLAINERS.forEach(function(explainer, index){
   PLANTS.splice((Math.floor((Math.random() * PLANTS.length)) + index*3), 0, explainer)
@@ -15,19 +14,22 @@ EXPLAINERS.forEach(function(explainer, index){
 class Main extends Component {
   constructor(props) {
     super(props);
-        
-    
     this.state = {
         plants: PLANTS,
         criteria: [],
         searchValue: "",
+        collapse: true,
+        guideHeight: "",
+        navHeight: 0
     };
     this.plantFilter = this.plantFilter.bind(this);
     this.updateCriteria = this.updateCriteria.bind(this);
     this.clearCriteria = this.clearCriteria.bind(this);
-    this.clearCriteriaToast = this.clearCriteriaToast.bind(this);
     this.valCheck = this.valCheck.bind(this);
     this.formControll = this.formControll.bind(this);
+    this.collapseHandler = this.collapseHandler.bind(this);
+    this.guideHeightHandler = this.guideHeightHandler.bind(this);
+    this.updateNavHeight = this.updateNavHeight.bind(this);
   }
 
   plantFilter(plant) {
@@ -35,7 +37,6 @@ class Main extends Component {
     var cardheight = true;
     var cardlight = true;
     var cardcare = true;
-    
     for (let i = 0; i < this.state.criteria.length; i++) {
         if (this.state.criteria[i][0] == "height" && plant.height && plant.height.indexOf(this.state.criteria[i][1]) > -1) {
             cardheight = true;
@@ -60,7 +61,6 @@ class Main extends Component {
             cardcare = false;
         };
     }
-
     var cardValue
     if(plant.keywords) {cardValue = plant.keywords.toLowerCase()};
     cardValue += plant.name.toLowerCase();
@@ -69,21 +69,19 @@ class Main extends Component {
 
   /* functions to edit criteria list and to update toasts and navbar links according to that list */
 
-  updateCriteria(ev) {
+  updateCriteria(type, val) {
     var criterium = [];
-    var test = ev.target.dataset.critval;
-    if (this.state.criteria.find(function(currentVal) {return currentVal[1] == test;}) == undefined){
-        criterium.push(ev.target.dataset.crittype);
-        criterium.push(ev.target.dataset.critval);
+    if (this.state.criteria.find(function(currentVal) {return currentVal[1] == val;}) == undefined){
+        criterium.push(type);
+        criterium.push(val);
         let criteria = this.state.criteria;
         criteria.push(criterium);
         this.setState({criteria : criteria});
     } else {
-        var clear = ev.target.dataset.critval;
         var i = "";
         while (this.state.criteria.find(function(currentVal, index) {
             i = index;
-            return currentVal[1] == clear;
+            return currentVal[1] == val;
         }) != undefined) {
           let criteria = this.state.criteria;
           criteria.splice(i, 1);
@@ -96,8 +94,7 @@ class Main extends Component {
     this.setState({searchValue: ev.target.value});
   }
 
-  clearCriteria(ev) {
-    var clear = ev.target.dataset.critclear;
+  clearCriteria(clear) {
     var i = "";
     while (this.state.criteria.find(function(currentVal, index) {
         i = index;
@@ -105,26 +102,29 @@ class Main extends Component {
     }) != undefined) {
         let criteria = this.state.criteria
         criteria.splice(i, 1);
-        this.setState({criteria: criteria})
-    }
-  }
-
-  clearCriteriaToast(clear) {
-    var i = "";
-    while (this.state.criteria.find(function(currentVal, index) {
-        i = index;
-          return currentVal[0] == clear;
-    }) != undefined) {
-        let criteria = this.state.criteria
-        criteria.splice(i, 1);
-        this.setState({criteria: criteria})
+        this.setState({criteria : criteria})
     }
   }
   
   valCheck(item) {
     var check = item.dataset.critval;
     return this.state.criteria.find(function(value) {return value[1] == check;}) !== undefined
-    };
+  };
+
+  /* functions to expand or collapse the guide and pass information to make the nav bar sticky on scroll */
+
+  collapseHandler() {
+    let collapse = !this.state.collapse;
+    this.setState({collapse : collapse});
+  }
+
+  guideHeightHandler(rectHeight) {
+    this.setState({guideHeight : rectHeight});
+  }
+
+  updateNavHeight(rectHeight) {
+    this.setState({navHeight : rectHeight});
+  }
   
   
   render() {
@@ -132,33 +132,22 @@ class Main extends Component {
 
     const PlantWithName = ({match}) => {
       return (
-        <PlantSingle plant={this.props.dishes.filter((dish) => dish.id === match.params.plantName)[0]} />
+        <div>
+          <Guide collapseHandler={this.collapseHandler} guideHeightHandler={this.guideHeightHandler} collapse={this.state.collapse} plant={this.state.plants.filter((plant) => plant.name === match.params.plantName)[0]} />
+          <FilterNav updateCriteria={this.updateCriteria} clearCriteria={this.clearCriteria} valCheck={this.valCheck} formControll={this.formControll} collapseHandler={this.collapseHandler} updateNavHeight={this.updateNavHeight} criteria={this.state.criteria} formValue={this.state.searchValue} collapse={this.state.collapse} guideHeight={this.state.guideHeight} />
+          <PlantList plants={this.state.plants} plantFilter={this.plantFilter} navHeight={this.state.navHeight}/>
+        </div>
+        
       )
     }
 
-    /*const HomePage =() => {
-      return(
-        <div>
-          <FilterNav updateCriteria={this.updateCriteria} clearCriteria={this.clearCriteria} valCheck={this.valCheck} formControll={this.formControll} formValue={this.state.searchValue}/>
-          <PlantList plants={this.state.plants} plantFilter={this.plantFilter}/>
-        </div>
-      )
-    }*/
-  
-    /*return (
-      <div className="App">
-        <Switch>
-          <Route path="/home" component={HomePage}/>
-          <Route path="/:plantName" component={PlantWithName}/>
-          <Redirect to="/home" />
-        </Switch>
-      </div>
-    );*/
-
     return (
       <div className="App">
-        <FilterNav updateCriteria={this.updateCriteria} clearCriteria={this.clearCriteria} clearCriteriaToast={this.clearCriteriaToast} valCheck={this.valCheck} formControll={this.formControll} criteria={this.state.criteria} formValue={this.state.searchValue}  test={this.state.test}/>
-        <PlantList plants={this.state.plants} plantFilter={this.plantFilter}/>
+        <Switch>
+          <Route path="/:plantName" component={PlantWithName}/>
+          <Redirect to="/Light" />
+        </Switch>
+
       </div>
     );
   }

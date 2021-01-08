@@ -6,11 +6,11 @@ function Toasts(props) {
     React.useEffect(() => {
         var filterItems = document.querySelectorAll('.toast-p');
         for (let i = 0; i < filterItems.length; i++) {
-            filterItems[i].addEventListener("click", props.updateCriteria);
+            filterItems[i].addEventListener("click", (ev) => props.updateCriteria(null, ev.target.dataset.critval));
         }
     }, []);
 
-    const toggle = () => props.clearCriteriaToast(props.crittype)
+    const toggle = () => props.clearCriteria(props.crittype)
 
     const ToastItems = props.criteria.map((criterium) =>  {
         return(

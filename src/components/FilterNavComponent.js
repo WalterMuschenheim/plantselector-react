@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Collapse,
     Navbar,
@@ -17,28 +17,67 @@ import Toasts from './ToastComponent';
 
 function FilterNav(props) {
     
+    const [sticky, setSticky] = useState({ isSticky: false});
+    
+    const navbarRef = useRef(null);
+    
     const [isOpen, setIsOpen] = useState(false);
 
     const toggle = () => setIsOpen(!isOpen);
 
+    const handleScroll = (stickiness, guideHeight, navHeight) => {
+
+        if (window.scrollY >= guideHeight) {
+            if (stickiness != true) {
+                setSticky({ isSticky: true});
+                props.updateNavHeight(navHeight);
+            }
+        } else {
+            if (stickiness != false) {
+                setSticky({ isSticky: false});
+                props.updateNavHeight(0);
+            }
+        }
+    }
+
+    useEffect(() => { 
+        var navRect = navbarRef.current.getBoundingClientRect();   
+        const handleScrollEvent = () => {
+            handleScroll(sticky.isSticky, props.guideHeight, navRect.height)
+          }
+        window.addEventListener('scroll', handleScrollEvent)
+        
+        return () => {
+            window.removeEventListener('scroll', handleScrollEvent);
+          };
+    }, [props.guideHeight, sticky.isSticky])
+
+    useEffect(() => { 
+        var navRect = navbarRef.current.getBoundingClientRect();
+        const handleScrollEvent = () => {
+            handleScroll(sticky.isSticky, props.guideHeight, navRect.height)
+          }
+        handleScrollEvent()
+    }, [props.collapse])
+
     const Dropdowns = (props) => {
         
-        React.useEffect(() => {
+        useEffect(() => {
             var filterItems = document.querySelectorAll('.filter-item');
             for (let i = 0; i < filterItems.length; i++) {
-                filterItems[i].addEventListener("click", props.updateCriteria);
+                filterItems[i].addEventListener("click", (ev) => props.updateCriteria(ev.target.dataset.crittype, ev.target.dataset.critval));
                 if (props.valCheck(filterItems[i])) {filterItems[i].classList.add("active")}
             }
             var clearItems = document.querySelectorAll('.clear-item');
             for (let i = 0; i < clearItems.length; i++) {
-                clearItems[i].addEventListener("click", (ev) => props.clearCriteriaToast(ev.target.dataset.critclear))
+                clearItems[i].addEventListener("click", (ev) => props.clearCriteria(ev.target.dataset.critclear))
             }
         }, []);
         
         return(
-            <Nav className="navbar-nav d-flex " navbar>
+            <Nav className="navbar-nav d-flex" navbar>
                 <NavItem id="guideitem" className="nav-item active">
-                <NavLink id="guidebutton" role="button" data-toggle="collapse" data-target="#carouselcollapse">Guide</NavLink>
+                <NavLink id="guidebutton" role="button" onClick={props.collapseHandler}>Guide</NavLink>
                 </NavItem>
                 <UncontrolledDropdown nav inNavbar>
                     <DropdownToggle nav caret>
@@ -90,7 +129,7 @@ function FilterNav(props) {
             types.map((type) => {
               if (props.criteria && props.criteria.find(function(criterium) {return (criterium[0] == type)}) != undefined) {
                   return(
-                    <Toasts updateCriteria={props.updateCriteria} clearCriteriaToast={props.clearCriteriaToast} criteria={props.criteria.filter(function(criterium) {return (criterium[0] == type)})} crittype={type}/>
+                    <Toasts updateCriteria={props.updateCriteria} clearCriteria={props.clearCriteria} criteria={props.criteria.filter(function(criterium) {return (criterium[0] == type)})} crittype={type}/>
                   )
                 }  
               });
@@ -105,18 +144,18 @@ function FilterNav(props) {
     }
     
     return(
-        <div id="navbarcontainer">
+        <div id="navbarcontainer" className={sticky.isSticky ? 'navbar-sticky' : ''} ref={navbarRef}>
             <div className="container">
                 <Navbar color="light" light expand="lg">
                     <NavbarBrand href="#">Plant Selector</NavbarBrand>
                     <NavbarToggler onClick={toggle}/>
                     <Collapse isOpen={isOpen} navbar className="justify-content-between">
-                        <Dropdowns valCheck={props.valCheck} updateCriteria={props.updateCriteria} clearCriteria={props.clearCriteria}/>
+                        <Dropdowns valCheck={props.valCheck} updateCriteria={props.updateCriteria} clearCriteria={props.clearCriteria} collapseHandler={props.collapseHandler}/>
                         <form className="form-inline navbar-nav">
                             <input className="form-control" id="plantsearch" type="search" placeholder="Keyword Search" value={props.formValue} onChange={props.formControll}/>
                         </form>
                     </Collapse>
-                    <RenderToasts updateCriteria={props.updateCriteria} clearCriteriaToast={props.clearCriteriaToast} criteria={props.criteria}/>
+                    <RenderToasts updateCriteria={props.updateCriteria} clearCriteria={props.clearCriteria} criteria={props.criteria}/>
                 </Navbar>
             </div>
         </div>
