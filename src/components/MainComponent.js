@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PlantList from './PlantListComponent';
 import FilterNav from './FilterNavComponent';
 import Guide from './GuideComponent';
-import { Switch, Route, Redirect } from 'react-router-dom';
 import { PLANTS } from '../shared/plants';
 import { EXPLAINERS } from '../shared/explainers';
 import ReactDOM from 'react-dom'
@@ -20,7 +19,8 @@ class Main extends Component {
         searchValue: "",
         collapse: true,
         guideHeight: "",
-        navHeight: 0
+        navHeight: 0,
+        sticky: false,
     };
     this.plantFilter = this.plantFilter.bind(this);
     this.updateCriteria = this.updateCriteria.bind(this);
@@ -28,9 +28,12 @@ class Main extends Component {
     this.valCheck = this.valCheck.bind(this);
     this.formControll = this.formControll.bind(this);
     this.collapseHandler = this.collapseHandler.bind(this);
-    this.guideHeightHandler = this.guideHeightHandler.bind(this);
+    this.updateGuideHeight = this.updateGuideHeight.bind(this);
     this.updateNavHeight = this.updateNavHeight.bind(this);
+    this.updateSticky = this.updateSticky.bind(this)
   }
+
+  /* function to filter grid of plants based on current criteria */
 
   plantFilter(plant) {
     var searchValue = this.state.searchValue;
@@ -118,36 +121,26 @@ class Main extends Component {
     this.setState({collapse : collapse});
   }
 
-  guideHeightHandler(rectHeight) {
+  updateGuideHeight(rectHeight) {
     this.setState({guideHeight : rectHeight});
   }
 
   updateNavHeight(rectHeight) {
     this.setState({navHeight : rectHeight});
   }
+
+  updateSticky(isSticky) {
+    this.setState({sticky : isSticky});
+  }
   
   
   render() {
-   
-
-    const PlantWithName = ({match}) => {
-      return (
-        <div>
-          <Guide collapseHandler={this.collapseHandler} guideHeightHandler={this.guideHeightHandler} collapse={this.state.collapse} plant={this.state.plants.filter((plant) => plant.name === match.params.plantName)[0]} />
-          <FilterNav updateCriteria={this.updateCriteria} clearCriteria={this.clearCriteria} valCheck={this.valCheck} formControll={this.formControll} collapseHandler={this.collapseHandler} updateNavHeight={this.updateNavHeight} criteria={this.state.criteria} formValue={this.state.searchValue} collapse={this.state.collapse} guideHeight={this.state.guideHeight} />
-          <PlantList plants={this.state.plants} plantFilter={this.plantFilter} navHeight={this.state.navHeight}/>
-        </div>
-        
-      )
-    }
 
     return (
       <div className="App">
-        <Switch>
-          <Route path="/:plantName" component={PlantWithName}/>
-          <Redirect to="/Light" />
-        </Switch>
-
+          <Guide collapseHandler={this.collapseHandler} updateGuideHeight={this.updateGuideHeight} updateNavHeight={this.updateNavHeight} collapse={this.state.collapse} guideHeight={this.state.guideHeight} plants={this.state.plants}/>
+          <FilterNav updateCriteria={this.updateCriteria} clearCriteria={this.clearCriteria} valCheck={this.valCheck} formControll={this.formControll} collapseHandler={this.collapseHandler} updateNavHeight={this.updateNavHeight} updateSticky={this.updateSticky} criteria={this.state.criteria} formValue={this.state.searchValue} collapse={this.state.collapse} guideHeight={this.state.guideHeight} sticky={this.state.sticky}/>
+          <PlantList plants={this.state.plants} plantFilter={this.plantFilter} navHeight={this.state.navHeight} collapseHandler={this.collapseHandler} collapse={this.state.collapse}/>
       </div>
     );
   }

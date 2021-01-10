@@ -1,4 +1,5 @@
 import Main from './components/MainComponent';
+import ScrollToTop from './components/ScrollToTopComponent';
 import './App.scss';
 import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
@@ -6,9 +7,10 @@ import { BrowserRouter } from 'react-router-dom';
 function App() {
   return (
     <BrowserRouter>
-        <div className="App">
-          <Main/>
-        </div>
+      <ScrollToTop/>
+      <div className="App">
+        <Main/>
+      </div>
     </BrowserRouter>
   );
 }

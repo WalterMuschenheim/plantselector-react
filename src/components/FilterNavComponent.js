@@ -17,7 +17,7 @@ import Toasts from './ToastComponent';
 
 function FilterNav(props) {
     
-    const [sticky, setSticky] = useState({ isSticky: false});
+    const isSticky = props.sticky === true ? 'navbar-sticky' : '';
     
     const navbarRef = useRef(null);
     
@@ -26,15 +26,15 @@ function FilterNav(props) {
     const toggle = () => setIsOpen(!isOpen);
 
     const handleScroll = (stickiness, guideHeight, navHeight) => {
-
+        console.log("scrollY in here is" + window.scrollY);
         if (window.scrollY >= guideHeight) {
             if (stickiness != true) {
-                setSticky({ isSticky: true});
+                props.updateSticky(true);
                 props.updateNavHeight(navHeight);
             }
         } else {
             if (stickiness != false) {
-                setSticky({ isSticky: false});
+                props.updateSticky(false);
                 props.updateNavHeight(0);
             }
         }
@@ -43,22 +43,19 @@ function FilterNav(props) {
     useEffect(() => { 
         var navRect = navbarRef.current.getBoundingClientRect();   
         const handleScrollEvent = () => {
-            handleScroll(sticky.isSticky, props.guideHeight, navRect.height)
+            handleScroll(props.sticky, props.guideHeight, navRect.height)
           }
         window.addEventListener('scroll', handleScrollEvent)
         
         return () => {
             window.removeEventListener('scroll', handleScrollEvent);
           };
-    }, [props.guideHeight, sticky.isSticky])
+    }, [props.guideHeight, props.sticky])
 
     useEffect(() => { 
         var navRect = navbarRef.current.getBoundingClientRect();
-        const handleScrollEvent = () => {
-            handleScroll(sticky.isSticky, props.guideHeight, navRect.height)
-          }
-        handleScrollEvent()
-    }, [props.collapse])
+        handleScroll(props.sticky, props.guideHeight, navRect.height)
+    }, [props.guideHeight])
 
     const Dropdowns = (props) => {
         
@@ -144,7 +141,7 @@ function FilterNav(props) {
     }
     
     return(
-        <div id="navbarcontainer" className={sticky.isSticky ? 'navbar-sticky' : ''} ref={navbarRef}>
+        <div id="navbarcontainer" className={isSticky} ref={navbarRef}>
             <div className="container">
                 <Navbar color="light" light expand="lg">
                     <NavbarBrand href="#">Plant Selector</NavbarBrand>

@@ -7,7 +7,9 @@ function PlantCard(props) {
     if(props.plantFilter(props.plant)) {
         return(
             <Link to={`/${props.plant.name}`}>
-                <Card>
+                <Card onClick={() => {if (!props.collapse) {
+                props.collapseHandler();
+            }}}>
                     {
                         //function() {if(props.plant.imageURL != "undefined") {return(
                     }<CardImg src={props.plant.imageURL}/>{
