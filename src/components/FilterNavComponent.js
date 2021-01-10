@@ -143,7 +143,7 @@ function FilterNav(props) {
     return(
         <div id="navbarcontainer" className={isSticky} ref={navbarRef}>
             <div className="container">
-                <Navbar color="light" light expand="lg">
+                <Navbar light expand="lg">
                     <NavbarBrand href="#">Plant Selector</NavbarBrand>
                     <NavbarToggler onClick={toggle}/>
                     <Collapse isOpen={isOpen} navbar className="justify-content-between">

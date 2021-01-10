@@ -37,17 +37,23 @@ function Guide(props) {
         }, [props.plant])
       
         return (
-                <div className="row row-content">
-                    <div className="container" id="plant-guide">
-                        <div>
-                            {props.plant.name}
-                        </div>
-                        <div>
-                            <img src={props.plant.imageURL}/>
-                        </div>
-                        <div>
-                            {props.plant.longDescription}
-                        </div>
+                <div className="container guide" id="plant-guide">
+                    <div className="container guide-item">
+
+                            <div className="row">
+                                <div className="col-12">
+                                    <h4>{props.plant.name}</h4>
+                                </div>
+                            </div>
+                            <div className="row row-content">
+                                <div className="col-md-4">
+                                    <img src={props.plant.imageURL}/>
+                                </div>
+                                <div className="guide-text col-md-8">
+                                    {props.plant.longDescription}
+                                </div>
+                            </div>
+
                     </div>
                 </div>
         )

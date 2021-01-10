@@ -2,28 +2,25 @@ import { Card, CardImg, CardBody, CardText, CardTitle } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
+
 function PlantCard(props) {
+
+    const MaybeImg = () => {
+        if(props.plant.imageURL) {return(<CardImg src={props.plant.imageURL}/>)} else {return null}}
 
     if(props.plantFilter(props.plant)) {
         return(
             <Link to={`/${props.plant.name}`}>
-                <Card onClick={() => {if (!props.collapse) {
+                <Card className={!props.plant.imageURL ? "explainer" : ""} onClick={() => {if (!props.collapse) {
                 props.collapseHandler();
             }}}>
-                    {
-                        //function() {if(props.plant.imageURL != "undefined") {return(
-                    }<CardImg src={props.plant.imageURL}/>{
-                        //)}}
-                    }
+                    <MaybeImg/>
                     <CardBody>
                         <CardTitle>
                             {props.plant.name}
                         </CardTitle>
                         <CardText>
                             {props.plant.description}
-                            {props.plant.height}
-                            {props.plant.light}
-                            {props.plant.care}
                         </CardText>
                     </CardBody>
                 </Card>

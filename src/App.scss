@@ -24,7 +24,13 @@ body {
         font-family: $header;
         font-weight: 300;
     }
+    .card-title {
+        font-family: $header;
+        font-weight: 300;
+    }
 }
+
+a {color: inherit}
 
 .carousel-btn-container {
     background: bisque;
@@ -32,10 +38,10 @@ body {
     height: 100%;
 }
 
-.carousel {
+.guide {
     font-family: $alt-body;
     img {
-        max-height: 330px;
+        max-width: 100%;
         &.mb-3{
             @media screen and (max-width: $media-sm) {
                 padding: 5px;
@@ -44,29 +50,26 @@ body {
     }
 }
 
-#plantcarousel {
+#plant-guide {
     margin-top: 40px;
 }
 
-.carousel-item {
+.guide-item {
     background-color: $bg-color;
     color: $color;
     @media screen and (min-width: $media-lg) {
-        height: 370px;
+        height: /*370px*/ 550px;
     }
     @media screen and (min-width: $media-md) and (max-width: $media-lg) {
-        height: 550px;
+        height: /*550px*/ 930px;
     }
-    > .row {
-        height: 100%;
-    }
-    .carousel-text-right {
+    .guide-text-right {
         padding: 4em;
         @media screen and (min-width: $media-sm) {
             padding: 4em 4em 0 0;
         }
     }
-    .carousel-text {
+    .guide-text {
         padding: 4em;
     }
     .plant-center {
@@ -120,10 +123,6 @@ body {
     height: 100%;
 }
 
-.card:not(.explainer):hover {
-    cursor: pointer;
-}
-
 .explainer {
     background-color: $color;
     color: $bg-color;
@@ -134,7 +133,7 @@ body {
             color: $alt-link-hover;
         }
     }
-    h5 {
+    .card-title {
         font-family: $alt-header;
         font-weight: bolder;
     }
