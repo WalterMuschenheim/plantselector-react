@@ -35,25 +35,26 @@ function Guide(props) {
         useEffect(() => {
             onPlantChange(props.plant);
         }, [props.plant])
+
+        const InnerContent = () => {if (props.plant.imageURL) {return(<div className="row row-content"><div className="col-md-4">
+        <img src={props.plant.imageURL}/>
+    </div>
+    <div className="guide-text col-md-8">
+        {props.plant.longDescription}
+    </div></div>)} else {return(<div className="row row-content">
+    <div className="guide-text col-12">
+        {props.plant.longDescription}
+    </div></div>)}}
       
         return (
                 <div className="container guide" id="plant-guide">
                     <div className="container guide-item">
-
                             <div className="row">
                                 <div className="col-12">
                                     <h4>{props.plant.name}</h4>
                                 </div>
                             </div>
-                            <div className="row row-content">
-                                <div className="col-md-4">
-                                    <img src={props.plant.imageURL}/>
-                                </div>
-                                <div className="guide-text col-md-8">
-                                    {props.plant.longDescription}
-                                </div>
-                            </div>
-
+                            <InnerContent/>
                     </div>
                 </div>
         )
