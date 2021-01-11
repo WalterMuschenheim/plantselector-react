@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/plantselector-react/static/css/main.b8f9b01c.chunk.css",
-    "main.js": "/plantselector-react/static/js/main.fd23e0c7.chunk.js",
-    "main.js.map": "/plantselector-react/static/js/main.fd23e0c7.chunk.js.map",
+    "main.js": "/plantselector-react/static/js/main.d20fd478.chunk.js",
+    "main.js.map": "/plantselector-react/static/js/main.d20fd478.chunk.js.map",
     "runtime-main.js": "/plantselector-react/static/js/runtime-main.72e20730.js",
     "runtime-main.js.map": "/plantselector-react/static/js/runtime-main.72e20730.js.map",
     "static/css/2.20aa2d7b.chunk.css": "/plantselector-react/static/css/2.20aa2d7b.chunk.css",
-    "static/js/2.2f32c04f.chunk.js": "/plantselector-react/static/js/2.2f32c04f.chunk.js",
-    "static/js/2.2f32c04f.chunk.js.map": "/plantselector-react/static/js/2.2f32c04f.chunk.js.map",
+    "static/js/2.5bfe3b0b.chunk.js": "/plantselector-react/static/js/2.5bfe3b0b.chunk.js",
+    "static/js/2.5bfe3b0b.chunk.js.map": "/plantselector-react/static/js/2.5bfe3b0b.chunk.js.map",
     "static/js/3.4f14da1b.chunk.js": "/plantselector-react/static/js/3.4f14da1b.chunk.js",
     "static/js/3.4f14da1b.chunk.js.map": "/plantselector-react/static/js/3.4f14da1b.chunk.js.map",
     "index.html": "/plantselector-react/index.html",
     "static/css/2.20aa2d7b.chunk.css.map": "/plantselector-react/static/css/2.20aa2d7b.chunk.css.map",
     "static/css/main.b8f9b01c.chunk.css.map": "/plantselector-react/static/css/main.b8f9b01c.chunk.css.map",
-    "static/js/2.2f32c04f.chunk.js.LICENSE.txt": "/plantselector-react/static/js/2.2f32c04f.chunk.js.LICENSE.txt"
+    "static/js/2.5bfe3b0b.chunk.js.LICENSE.txt": "/plantselector-react/static/js/2.5bfe3b0b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.72e20730.js",
     "static/css/2.20aa2d7b.chunk.css",
-    "static/js/2.2f32c04f.chunk.js",
+    "static/js/2.5bfe3b0b.chunk.js",
     "static/css/main.b8f9b01c.chunk.css",
-    "static/js/main.fd23e0c7.chunk.js"
+    "static/js/main.d20fd478.chunk.js"
   ]
 }
