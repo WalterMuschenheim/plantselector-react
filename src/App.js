@@ -6,12 +6,12 @@ import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ScrollToTop/>
       <div className="App">
         <Main/>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
