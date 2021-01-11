@@ -7164,43 +7164,50 @@ body {
   body h4 {
     font-family: "Poppins", sans-serif;
     font-weight: 300; }
+  body .card-title {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300; }
+
+a {
+  color: inherit; }
 
 .carousel-btn-container {
   background: bisque;
   width: 100%;
   height: 100%; }
 
-.carousel {
+.guide {
   font-family: "Playfair Display", "Times New Roman", Times, serif; }
-  .carousel img {
-    max-height: 330px; }
+  .guide img {
+    max-width: 100%;
+    border-radius: calc(0.25rem - 1px); }
     @media screen and (max-width: 576px) {
-      .carousel img.mb-3 {
+      .guide img.mb-3 {
         padding: 5px; } }
 
-#plantcarousel {
+#plant-guide {
   margin-top: 40px; }
 
-.carousel-item {
+.guide-item {
   background-color: bisque;
-  color: darkslategrey; }
+  color: darkslategrey;
+  border-radius: calc(0.25rem - 1px);
+  padding: 20px; }
   @media screen and (min-width: 992px) {
-    .carousel-item {
-      height: 370px; } }
+    .guide-item {
+      height: auto; } }
   @media screen and (min-width: 768px) and (max-width: 992px) {
-    .carousel-item {
-      height: 550px; } }
-  .carousel-item > .row {
-    height: 100%; }
-  .carousel-item .carousel-text-right {
+    .guide-item {
+      height: auto; } }
+  .guide-item .guide-text-right {
     padding: 4em; }
     @media screen and (min-width: 576px) {
-      .carousel-item .carousel-text-right {
+      .guide-item .guide-text-right {
         padding: 4em 4em 0 0; } }
-  .carousel-item .carousel-text {
+  .guide-item .guide-text {
     padding: 4em; }
   @media screen and (max-width: 768px) {
-    .carousel-item .plant-center {
+    .guide-item .plant-center {
       text-align: center; } }
 
 .navbar-brand {
@@ -7237,9 +7244,6 @@ body {
 .card {
   height: 100%; }
 
-.card:not(.explainer):hover {
-  cursor: pointer; }
-
 .explainer {
   background-color: darkslategrey;
   color: bisque;
@@ -7248,7 +7252,7 @@ body {
     color: burlywood; }
     .explainer a:hover {
       color: peru; }
-  .explainer h5 {
+  .explainer .card-title {
     font-family: "EB Garamond", "Times New Roman", Times, serif;
     font-weight: bolder; }
 
