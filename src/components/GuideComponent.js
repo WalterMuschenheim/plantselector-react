@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Collapse } from 'reactstrap';
+import { Collapse, Popover, UncontrolledPopover, PopoverBody, PopoverHeader } from 'reactstrap';
 import { Router, Switch, Route, Redirect, useParams } from 'react-router-dom';
 
 
@@ -36,15 +36,68 @@ function Guide(props) {
             onPlantChange(props.plant);
         }, [props.plant])
 
-        const InnerContent = () => {if (props.plant.imageURL) {return(<div className="row row-content"><div className="col-md-4">
-        <img src={props.plant.imageURL}/>
-    </div>
-    <div className="guide-text col-md-8">
-        {props.plant.longDescription}
-    </div></div>)} else {return(<div className="row row-content">
-    <div className="guide-text col-12">
-        {props.plant.longDescription}
-    </div></div>)}}
+        const PopoverItem = (props) => {
+
+            const { position, topic, plant } = props;
+
+            const [popoverOpen, setPopoverOpen] = useState(false);
+
+            const toggle = () => setPopoverOpen(!popoverOpen);
+
+            return(
+                <div class={"modal-popover " + position}>
+                    <a id={"Popover-" + position} role="button" ></a>
+                    <Popover trigger="hover" placement="right" isOpen={popoverOpen} target={"Popover-" + position} toggle={toggle}>
+                        <PopoverHeader>{topic}</PopoverHeader>
+                        <PopoverBody>{plant[`${topic}`]}</PopoverBody>
+                    </Popover>
+                </div>
+            )
+        }
+
+        const popovers = [
+            {
+                position : "top",
+                topic : "light"
+            },
+            {
+                position : "middle",
+                topic : "height"
+            },
+            {
+                position : "bottom",
+                topic : "care"
+            }
+        ]
+
+        const InnerContent = () => {
+                if (props.plant.imageURL) {
+                    return(
+                        <div className="row row-content">
+                            <div className="col-md-4">
+                                {popovers.map((popover) => {return(<PopoverItem position={popover.position} topic={popover.topic} plant={props.plant}/>)})}
+                                <div id="modal-image-container">
+                                    <img src={props.plant.imageURL}/>
+                                </div>
+                            </div>
+
+
+                          
+                            <div className="guide-text col-md-8">
+                                {props.plant.longDescription}
+                            </div>
+                        </div>
+                    )
+                } else {
+                    return(
+                        <div className="row row-content">
+                            <div className="guide-text col-12">
+                                {props.plant.longDescription}
+                            </div>
+                        </div>
+                )
+            }
+        }
       
         return (
                 <div className="container guide" id="plant-guide">

@@ -42,6 +42,7 @@ a {color: inherit}
     font-family: $alt-body;
     img {
         max-width: 100%;
+        border-radius: calc(0.25rem - 1px);
         &.mb-3{
             @media screen and (max-width: $media-sm) {
                 padding: 5px;
@@ -57,11 +58,13 @@ a {color: inherit}
 .guide-item {
     background-color: $bg-color;
     color: $color;
+    border-radius: calc(0.25rem - 1px);
+    padding: 20px;
     @media screen and (min-width: $media-lg) {
-        height: /*370px*/ 550px;
+        height: auto;
     }
     @media screen and (min-width: $media-md) and (max-width: $media-lg) {
-        height: /*550px*/ 930px;
+        height: auto;
     }
     .guide-text-right {
         padding: 4em;
