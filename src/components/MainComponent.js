@@ -46,11 +46,11 @@ class Main extends Component {
     const filteredPlants = plants.filter((plant) => {
       //for each plant, check each criteria type against user entered data
       const trueOrFalse = criteriaTypes.map((type) => {
-        //get get all user entered criteria that correspond to each type and see if any of them match the plant's properties
+        //get get all user entered criteria that correspond to each type
         const filteredCriteria = criteria.filter(
           (criterium) => criterium[0] === type
         );
-        //if there are any user-enetered criteria of a certain type, check if at least one of them matches plant and return true or false
+        //if there are any user-enetered criteria of a certain type, check if at least one of them matches plant's property for the same type and return true or false
         return filteredCriteria.length > 0
           ? filteredCriteria.some(
               (criterium) => plant[`${type}`] === criterium[1]
