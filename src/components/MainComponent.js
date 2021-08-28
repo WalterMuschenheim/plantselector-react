@@ -2,40 +2,52 @@ import React, { Component } from "react";
 import PlantList from "./PlantListComponent";
 import FilterNav from "./FilterNavComponent";
 import Guide from "./GuideComponent";
-import { PLANTS } from "../shared/plants";
-import { EXPLAINERS } from "../shared/explainers";
 import ReactDOM from "react-dom";
 import { filter } from "minimatch";
+import { connect } from "react-redux";
+import { HashRouter, withRouter } from "react-router-dom";
+import {
+  addCriteria,
+  removeCriteria,
+  clearCriteria,
+  updateSearch,
+} from "../redux/ActionCreators";
 
-EXPLAINERS.forEach(function (explainer, index) {
-  PLANTS.splice(
-    Math.floor(Math.random() * PLANTS.length) + index * 3,
-    0,
-    explainer
-  );
+const mapStateToProps = (state) => {
+  return {
+    filters: state.filters,
+    header: state.header,
+    plants: state.plants,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  addCriteriaToStore: (type, criterium) =>
+    dispatch(addCriteria(type, criterium)),
+  removeCriteriaFromStore: (criterium) => dispatch(removeCriteria(criterium)),
+  clearCriteria: (type) => dispatch(clearCriteria(type)),
+  updateSearch: (searchTerms) => dispatch(updateSearch(searchTerms)),
 });
 
 class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      plants: PLANTS,
-      criteria: [],
-      searchValue: "",
       collapse: true,
       guideHeight: "",
       navHeight: 0,
       sticky: false,
     };
-    this.plantFilter = this.plantFilter.bind(this);
-    this.updateCriteria = this.updateCriteria.bind(this);
-    this.clearCriteria = this.clearCriteria.bind(this);
-    this.valCheck = this.valCheck.bind(this);
-    this.formControll = this.formControll.bind(this);
+
     this.collapseHandler = this.collapseHandler.bind(this);
+
     this.updateGuideHeight = this.updateGuideHeight.bind(this);
+
     this.updateNavHeight = this.updateNavHeight.bind(this);
+
     this.updateSticky = this.updateSticky.bind(this);
+
+    this.updateCriteria = this.updateCriteria.bind(this);
   }
 
   /* function to filter grid of plants based on current criteria */
@@ -82,55 +94,30 @@ class Main extends Component {
   /* functions to edit criteria list and to update toasts and navbar links according to that list */
 
   updateCriteria(type, val) {
-    var criterium = [];
     if (
-      this.state.criteria.find(function (currentVal) {
-        return currentVal[1] == val;
-      }) == undefined
+      this.props.filters.criteria.find(function (currentVal) {
+        return currentVal[1] === val;
+      }) === undefined
     ) {
-      criterium.push(type);
-      criterium.push(val);
-      let criteria = this.state.criteria;
-      criteria.push(criterium);
-      this.setState({ criteria: criteria });
+      this.props.addCriteriaToStore(type, val);
     } else {
-      var i = "";
-      while (
-        this.state.criteria.find(function (currentVal, index) {
-          i = index;
-          return currentVal[1] == val;
-        }) != undefined
-      ) {
-        let criteria = this.state.criteria;
-        criteria.splice(i, 1);
-        this.setState({ criteria: criteria });
-      }
+      this.props.removeCriteriaFromStore(val);
     }
   }
 
   formControll(ev) {
-    this.setState({ searchValue: ev.target.value });
+    this.props.updateSearch(ev.target.value);
   }
 
-  clearCriteria(clear) {
-    var i = "";
-    while (
-      this.state.criteria.find(function (currentVal, index) {
-        i = index;
-        return currentVal[0] == clear;
-      }) != undefined
-    ) {
-      let criteria = this.state.criteria;
-      criteria.splice(i, 1);
-      this.setState({ criteria: criteria });
-    }
-  }
+  // clearCriteria(type) {
+  //   this.props.clearCriteriaFromStore(type);
+  // }
 
-  valCheck(item) {
+  valCheck(item, criteria) {
     var check = item.dataset.critval;
     return (
-      this.state.criteria.find(function (value) {
-        return value[1] == check;
+      criteria.find(function (value) {
+        return value[1] === check;
       }) !== undefined
     );
   }
@@ -138,7 +125,7 @@ class Main extends Component {
   /* functions to expand or collapse the guide and pass information to make the nav bar sticky on scroll */
 
   collapseHandler() {
-    let collapse = !this.state.collapse;
+    let collapse = !this.props.header.collapse;
     this.setState({ collapse: collapse });
   }
 
@@ -156,9 +143,9 @@ class Main extends Component {
 
   render() {
     const filteredPlants = this.plantFilter(
-      this.state.plants,
-      this.state.criteria,
-      this.state.searchValue
+      this.props.plants,
+      this.props.filters.criteria,
+      this.props.filters.searchValue
     );
     return (
       <div className="App">
@@ -166,33 +153,33 @@ class Main extends Component {
           collapseHandler={this.collapseHandler}
           updateGuideHeight={this.updateGuideHeight}
           updateNavHeight={this.updateNavHeight}
-          collapse={this.state.collapse}
-          guideHeight={this.state.guideHeight}
-          plants={this.state.plants}
+          collapse={this.props.header.collapse}
+          guideHeight={this.props.header.guideHeight}
+          plants={this.props.plants}
         />
         <FilterNav
           updateCriteria={this.updateCriteria}
-          clearCriteria={this.clearCriteria}
+          clearCriteria={this.props.clearCriteria}
           valCheck={this.valCheck}
           formControll={this.formControll}
           collapseHandler={this.collapseHandler}
           updateNavHeight={this.updateNavHeight}
           updateSticky={this.updateSticky}
-          criteria={this.state.criteria}
-          formValue={this.state.searchValue}
-          collapse={this.state.collapse}
-          guideHeight={this.state.guideHeight}
-          sticky={this.state.sticky}
+          criteria={this.props.filters.criteria}
+          formValue={this.props.filters.searchValue}
+          collapse={this.props.header.collapse}
+          guideHeight={this.props.header.guideHeight}
+          sticky={this.props.header.sticky}
         />
         <PlantList
           plants={filteredPlants}
-          navHeight={this.state.navHeight}
+          navHeight={this.props.navHeight}
           collapseHandler={this.collapseHandler}
-          collapse={this.state.collapse}
+          collapse={this.props.header.collapse}
         />
       </div>
     );
   }
 }
 
-export default Main;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
