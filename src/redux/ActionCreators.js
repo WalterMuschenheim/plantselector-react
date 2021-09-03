@@ -15,3 +15,19 @@ export const clearCriteria = (type) => {
 export const updateSearch = (searchTerms) => {
   return { type: ActionTypes.UPDATE_SEARCH, payload: searchTerms };
 };
+
+export const collapseHandler = () => {
+  return { type: ActionTypes.COLLAPSE };
+};
+
+export const updateGuideHeight = (rectHeight) => {
+  return { type: ActionTypes.UPDATE_GUIDE_HEIGHT, payload: rectHeight };
+};
+
+export const updateNavHeight = (rectHeight) => {
+  return { type: ActionTypes.UPDATE_NAV_HEIGHT, payload: rectHeight };
+};
+
+export const updateSticky = (isSticky) => {
+  return { type: ActionTypes.UPDATE_STICKY, payload: isSticky };
+};

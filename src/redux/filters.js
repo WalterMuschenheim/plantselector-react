@@ -9,24 +9,26 @@ export const Filters = (
 ) => {
   switch (action.type) {
     case ActionTypes.ADD_CRITERIUM:
+      console.log(state);
       const newCriterium = action.payload;
-      state.criteria = { ...state.criteria, newCriterium };
-      return state;
+      const addCriteria = [...state.criteria, newCriterium];
+      console.log({ ...state, criteria: addCriteria });
+      return { ...state, criteria: addCriteria };
     case ActionTypes.REMOVE_CRITERIUM:
       const rValue = action.payload;
-      state.criteria = state.criteria.filter(
+      const removeCriteria = state.criteria.filter(
         (currentVal) => currentVal[1] !== rValue
       );
-      return state;
+      return { ...state, criteria: removeCriteria };
     case ActionTypes.CLEAR_CRITERIUM:
       const cValue = action.payload;
-      state.criteria = state.criteria.filter(
+      const clearCriteria = state.criteria.filter(
         (currentVal) => currentVal[0] !== cValue
       );
-      return state;
+      return { ...state, criteria: clearCriteria };
     case ActionTypes.UPDATE_SEARCH:
-      state.searchValue = action.payload;
-      return state;
+      const searchValue = action.payload;
+      return { ...state, searchValue: searchValue };
     default:
       return state;
   }

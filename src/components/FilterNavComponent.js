@@ -27,12 +27,12 @@ function FilterNav(props) {
   const handleScroll = (stickiness, guideHeight, navHeight) => {
     console.log("scrollY in here is" + window.scrollY);
     if (window.scrollY >= guideHeight) {
-      if (stickiness != true) {
+      if (stickiness !== true) {
         props.updateSticky(true);
         props.updateNavHeight(navHeight);
       }
     } else {
-      if (stickiness != false) {
+      if (stickiness !== false) {
         props.updateSticky(false);
         props.updateNavHeight(0);
       }

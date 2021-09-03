@@ -11,6 +11,10 @@ import {
   removeCriteria,
   clearCriteria,
   updateSearch,
+  collapseHandler,
+  updateGuideHeight,
+  updateNavHeight,
+  updateSticky,
 } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
@@ -22,31 +26,23 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
+  /* functions to edit criteria list and to update toasts and navbar links according to that list */
   addCriteriaToStore: (type, criterium) =>
     dispatch(addCriteria(type, criterium)),
   removeCriteriaFromStore: (criterium) => dispatch(removeCriteria(criterium)),
   clearCriteria: (type) => dispatch(clearCriteria(type)),
   updateSearch: (searchTerms) => dispatch(updateSearch(searchTerms)),
+  /* functions to expand or collapse the guide and pass information to make the nav bar sticky on scroll */
+  collapseHandler: () => dispatch(collapseHandler()),
+  updateGuideHeight: (rectHeight) => dispatch(updateGuideHeight(rectHeight)),
+  updateNavHeight: (rectHeight) => dispatch(updateNavHeight(rectHeight)),
+  updateSticky: (isSticky) => dispatch(updateSticky(isSticky)),
 });
 
 class Main extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      collapse: true,
-      guideHeight: "",
-      navHeight: 0,
-      sticky: false,
-    };
-
-    this.collapseHandler = this.collapseHandler.bind(this);
-
-    this.updateGuideHeight = this.updateGuideHeight.bind(this);
-
-    this.updateNavHeight = this.updateNavHeight.bind(this);
-
-    this.updateSticky = this.updateSticky.bind(this);
-
+    this.formControll = this.formControll.bind(this);
     this.updateCriteria = this.updateCriteria.bind(this);
   }
 
@@ -109,10 +105,6 @@ class Main extends Component {
     this.props.updateSearch(ev.target.value);
   }
 
-  // clearCriteria(type) {
-  //   this.props.clearCriteriaFromStore(type);
-  // }
-
   valCheck(item, criteria) {
     var check = item.dataset.critval;
     return (
@@ -120,25 +112,6 @@ class Main extends Component {
         return value[1] === check;
       }) !== undefined
     );
-  }
-
-  /* functions to expand or collapse the guide and pass information to make the nav bar sticky on scroll */
-
-  collapseHandler() {
-    let collapse = !this.props.header.collapse;
-    this.setState({ collapse: collapse });
-  }
-
-  updateGuideHeight(rectHeight) {
-    this.setState({ guideHeight: rectHeight });
-  }
-
-  updateNavHeight(rectHeight) {
-    this.setState({ navHeight: rectHeight });
-  }
-
-  updateSticky(isSticky) {
-    this.setState({ sticky: isSticky });
   }
 
   render() {
@@ -150,9 +123,9 @@ class Main extends Component {
     return (
       <div className="App">
         <Guide
-          collapseHandler={this.collapseHandler}
-          updateGuideHeight={this.updateGuideHeight}
-          updateNavHeight={this.updateNavHeight}
+          collapseHandler={this.props.collapseHandler}
+          updateGuideHeight={this.props.updateGuideHeight}
+          updateNavHeight={this.props.updateNavHeight}
           collapse={this.props.header.collapse}
           guideHeight={this.props.header.guideHeight}
           plants={this.props.plants}
@@ -162,9 +135,9 @@ class Main extends Component {
           clearCriteria={this.props.clearCriteria}
           valCheck={this.valCheck}
           formControll={this.formControll}
-          collapseHandler={this.collapseHandler}
-          updateNavHeight={this.updateNavHeight}
-          updateSticky={this.updateSticky}
+          collapseHandler={this.props.collapseHandler}
+          updateNavHeight={this.props.updateNavHeight}
+          updateSticky={this.props.updateSticky}
           criteria={this.props.filters.criteria}
           formValue={this.props.filters.searchValue}
           collapse={this.props.header.collapse}
@@ -174,7 +147,7 @@ class Main extends Component {
         <PlantList
           plants={filteredPlants}
           navHeight={this.props.navHeight}
-          collapseHandler={this.collapseHandler}
+          collapseHandler={this.props.collapseHandler}
           collapse={this.props.header.collapse}
         />
       </div>
